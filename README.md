@@ -2,8 +2,6 @@
 
 An all-powerful toolset for Desire.
 
-[![Build Status](https://travis-ci.org/desirepay/sentinel.svg?branch=master)](https://travis-ci.org/desirepay/sentinel)
-
 Sentinel is an autonomous agent for persisting, processing and automating Desire V12.1 governance objects and tasks, and for expanded functions in the upcoming Desire V13 release (Evolution).
 
 Sentinel is implemented as a Python application that binds to a local version 12.1 desired instance on each Desire V12.1 Masternode.
@@ -31,7 +29,7 @@ Make sure the local Desire daemon running is at least version 12.1 (120100)
 
 Clone the Sentinel repo and install Python dependencies.
 
-    $ git clone https://github.com/desirepay/sentinel.git && cd sentinel
+    $ git clone https://github.com/lazyboozer/sentinel/t && cd sentinel
     $ virtualenv ./venv
     $ ./venv/bin/pip install -r requirements.txt
 
@@ -65,9 +63,6 @@ To view debug output, set the `SENTINEL_DEBUG` environment variable to anything 
 
     $ SENTINEL_DEBUG=1 ./venv/bin/python bin/sentinel.py
 
-## Contributing
-
-Please follow the [DesireCore guidelines for contributing](https://github.com/desirepay/desire/blob/v0.12.1.x/CONTRIBUTING.md).
 
 Specifically:
 
