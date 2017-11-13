@@ -34,7 +34,7 @@ class DesireConfig():
         creds = {key: value for (key, value) in match}
 
         # standard Desire defaults...
-        default_port = 9998 if (network == 'mainnet') else 19998
+        default_port = 9918 if (network == 'mainnet') else 19918
 
         # use default port for network if not specified in desire.conf
         if not ('port' in creds):
