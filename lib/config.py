@@ -31,7 +31,7 @@ def get_args():
 def get_desire_conf():
     args = get_args()
 
-    if 'config' in args:
+    if args.config:
         desire_conf = args.config
     else:
         home = os.environ.get('HOME')

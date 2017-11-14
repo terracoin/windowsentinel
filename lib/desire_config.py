@@ -37,8 +37,8 @@ class DesireConfig():
         from config import get_args
         args = get_args()
 
-        if 'rpc_port' in args:
-            creds[u'port'] = args['rpc_port']
+        if args.rpc_port:
+            creds[u'port'] = args.rpc_port
         else:
             # standard Desire defaults...
             default_port = 9918 if (network == 'mainnet') else 19918
