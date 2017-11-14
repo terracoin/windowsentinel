@@ -17,7 +17,7 @@ import atexit
 import random
 from scheduler import Scheduler
 import argparse
-
+from termcolor import colored
 
 # sync desired gobject list with our local relational DB backend
 def perform_desired_object_sync(desired):
@@ -162,17 +162,17 @@ def main():
 
     # check desired connectivity
     if not is_desired_port_open(desired):
-        print("Cannot connect to desired. Please ensure desired is running and the JSONRPC port is open to Sentinel.")
+        print(colored("Cannot connect to desired. Please ensure desired is running and the JSONRPC port is open to Sentinel.", 'red'))
         return
 
     # check desired sync
     if not desired.is_synced():
-        print("desired not synced with network! Awaiting full sync before running Sentinel.")
+        print(colored("desired not synced with network! Awaiting full sync before running Sentinel.", 'yellow'))
         return
 
     # ensure valid masternode
     if not desired.is_masternode():
-        print("Invalid Masternode Status, cannot continue.")
+        print(colored('yellow', "Invalid Masternode Status, cannot continue."))
         return
 
     # register a handler if SENTINEL_DEBUG is set
@@ -230,12 +230,12 @@ def signal_handler(signum, frame):
     sys.exit(1)
 
 
-def cleanup():
+def cleanup(mutex_key):
     Transient.delete(mutex_key)
 
 
 def process_args():
-    parser = argparse.ArgumentParser()
+    parser = config.get_argarse()
     parser.add_argument('-b', '--bypass-scheduler',
                         action='store_true',
                         help='Bypass scheduler and sync/vote immediately',
@@ -245,12 +245,14 @@ def process_args():
     return args
 
 
-def main():
-    atexit.register(cleanup)
+def entrypoint():
+    # ensure another instance of Sentinel pointing at the same config
+    # is not currently running
+    mutex_key = 'SENTINEL_RUNNING_' + config.desire_conf
+
+    atexit.register(cleanup, mutex_key)
     signal.signal(signal.SIGINT, signal_handler)
 
-    # ensure another instance of Sentinel is not currently running
-    mutex_key = 'SENTINEL_RUNNING'
     # assume that all processes expire after 'timeout_seconds' seconds
     timeout_seconds = 90
 
@@ -267,4 +269,4 @@ def main():
     Transient.delete(mutex_key)
 
 if __name__ == '__main__':
-    main()
+    entrypoint()

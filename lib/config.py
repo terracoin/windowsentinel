@@ -15,11 +15,16 @@ sentinel_cfg = DesireConfig.tokenize(sentinel_config_file)
 sentinel_version = "1.1.0"
 min_desired_proto_version_with_sentinel_ping = 70207
 
+def get_argarse():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--config', type=str, required=False)
+    parser.add_argument('--rpc-port', type=int, required=False)
+    return parser
+
 def get_args():
+    parser = get_argarse()
+    
     try:
-        parser = argparse.ArgumentParser()
-        parser.add_argument('--config', type=str, required=False)
-        parser.add_argument('--rpc-port', type=int, required=False)
         args = parser.parse_args()
     except:
         # We are inside tests
