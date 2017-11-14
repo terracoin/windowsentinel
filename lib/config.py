@@ -23,7 +23,7 @@ def get_argarse():
 
 def get_args():
     parser = get_argarse()
-    
+
     try:
         args = parser.parse_args()
     except:
@@ -40,7 +40,12 @@ def get_desire_conf():
         desire_conf = args.config
     else:
         home = os.environ.get('HOME')
-        desire_conf = os.path.join(home, ".desirecore/desire.conf")
+        if home is not None:
+            desire_conf = os.path.join(home, ".desirecore/desire.conf")
+        else:
+            home = os.getenv('APPDATA')
+            desire_conf = os.path.join(home, "desirecore\\desire.conf")
+
         if sys.platform == 'darwin':
             desire_conf = os.path.join(home, "Library/Application Support/DesireCore/desire.conf")
 
