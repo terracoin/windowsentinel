@@ -33,15 +33,22 @@ class DesireConfig():
         # python >= 2.7
         creds = {key: value for (key, value) in match}
 
-        # standard Desire defaults...
-        default_port = 9918 if (network == 'mainnet') else 19918
+        # Fetch port from args, if any (import here to avoid circular deps)
+        from config import get_args
+        args = get_args()
 
-        # use default port for network if not specified in desire.conf
-        if not ('port' in creds):
-            creds[u'port'] = default_port
+        if 'rpc_port' in args:
+            creds[u'port'] = args['rpc_port']
+        else:
+            # standard Desire defaults...
+            default_port = 9918 if (network == 'mainnet') else 19918
 
-        # convert to an int if taken from desire.conf
-        creds[u'port'] = int(creds[u'port'])
+            # use default port for network if not specified in desire.conf
+            if not ('port' in creds):
+                creds[u'port'] = default_port
+
+            # convert to an int if taken from desire.conf
+            creds[u'port'] = int(creds[u'port'])
 
         # return a dictionary with RPC credential key, value pairs
         return creds
