@@ -8,9 +8,11 @@ import os
 import shutil
 import string
 import random
+import math
 
 from colorama import init
 from termcolor import colored
+from pynput import keyboard
 
 
 def random_string(n):
@@ -21,7 +23,7 @@ def random_string(n):
     return ''.join(pool[rnd.randint(0, m)] for _ in range(n))
 
 def run_sentinel():
-    print(colored('Sentinel is run every 1 minute', 'green'))
+    print(colored('Sentinel runs every 1 minute', 'green'))
 
     while True:
         now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -38,7 +40,7 @@ def fix_masternode(data_folder):
     wallet_file = os.path.join(data_folder, 'wallet.dat')
 
     if not os.path.isfile(wallet_file):
-        print('It seems data folder (the one containing wallet.data) is not the same as the folder where desire.conf is')
+        print('It seems like the data folder (the one containing wallet.data) is not the same as the folder where desire.conf is')
         data_folder = input('Please, write the data folder path: ')
         return fix_masternode(data_folder)
 
@@ -80,7 +82,11 @@ def fix_masternode(data_folder):
     except:
         r = None
         while r not in ('y', 'n'):
-            r = input(colored('It seems your desire.conf is not setting the wallet as masternode! Continuing will set it masternode=1, [y/n]: ', 'red'))
+            print(colored('It seems like your desire.conf is not setting the wallet as masternode!', 'red'))
+            print(colored('If your are running a COLD wallet, this must be executed on the MN wallet, not the collateral', 'red'))
+            print(colored('If you are using MNs hosts like HostMNs DO NOT continue, this should be done by them, not you!', 'red'))
+            r = input(colored('Continuing will set masternode=1, don\'t do it if this is a collateral wallet, [y/n]: ', 'red', attrs=['bold']))
+
             if r == 'n':
                 rewrite = False
             elif r != 'y':
@@ -119,25 +125,56 @@ def fix_masternode(data_folder):
     print('\n')
     run_sentinel()
     
+# @https://stackoverflow.com/questions/24582233/python-flush-input-before-raw-input
+def flush_input():
+    try:
+        import sys, termios
+        termios.tcflush(sys.stdin, termios.TCIOFLUSH)
+    except ImportError:
+        import msvcrt
+        while msvcrt.kbhit():
+            msvcrt.getch()
 
 def menu():
     print('Select an option:')
     print('\t1. Start sentinel')
     print('\t2. Fix wallet and masternode')
+    print('')
     
-    try:
-        option = input('Write 1 or 2: ')
-        option = int(option)
-        if option < 1 or option > 2:
-            raise Exception()
+    global menu_option 
+    menu_option = 0
 
-        return option
-    except KeyboardInterrupt as e:
-        print('')
-        sys.exit(1)
-    except:
-        print(colored('Option not valid', 'red'))
-        return None
+    def on_release(key):
+        global menu_option 
+
+        try:
+            if key.char in ('1', '2'):
+                menu_option = int(key.char)
+                return False
+            else:
+                print(colored('Option not valid', 'red'))
+        except:
+            pass
+
+    # Collect events until released
+    with keyboard.Listener(on_release=on_release) as listener:
+        r = 30
+        while menu_option == 0 and r > 0:
+            sys.stdout.write('\rPress 1 or 2. Sentinel will automatically start in {}s  '.format(int(math.ceil(r))))
+            sys.stdout.flush()
+
+            r -= 0.1
+            time.sleep(0.1)
+
+        listener.stop()
+
+    if menu_option == 0:
+        menu_option = 1
+
+    flush_input()
+
+    print('\n')
+    return menu_option
 
 if __name__ == '__main__':
     init()
@@ -147,10 +184,7 @@ if __name__ == '__main__':
     try: input = raw_input
     except NameError: pass
 
-    option = None
-    while option is None: 
-        option = menu()
-
+    option = menu()
     if option == 1: 
         run_sentinel()
     elif option == 2: 
