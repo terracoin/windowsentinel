@@ -108,7 +108,7 @@ def fix_masternode(data_folder):
 
         # It must have a masternodeprivkey
         if 'masternodeprivkey' not in tokens:
-            print(colored('Your desire.conf does not contain a \'masternodeprivkey\' entry, please set it up before opening wallet', 'red'))
+            print(colored('Your desire.conf does not contain a \'masternodeprivkey\' entry, please set it up before opening your wallet', 'red'))
 
         # Rewrite config
         with open(config.desire_conf, 'w') as fp:
@@ -151,6 +151,16 @@ def flush_input():
             msvcrt.getch()
 
 def menu():
+    args = config.get_args()
+
+    if args.repair and args.sentinel:
+        print(colored('Do not specify --repair and --sentinel at the same time', 'red'))
+        sys.exit(1)
+    elif args.sentinel:
+        return 1
+    elif args.repair:
+        return 2
+
     print('Select an option:')
     print('\t1. Start sentinel')
     print('\t2. Fix wallet and masternode')
