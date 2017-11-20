@@ -1,3 +1,4 @@
+from builtins import input
 import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
@@ -82,31 +83,29 @@ def has_desire_conf():
 def main():
     install_instructions = "\tpip install -r requirements.txt"
 
-    wait = getattr(__builtins__, 'raw_input', input)
-
     if not is_valid_python_version():
         print("Python %s is not supported" % python_short_ver_str())
 
-        wait('Press [ENTER] to exit')
+        input('Press [ENTER] to exit')
         sys.exit(1)
 
     if not are_deps_installed():
         print("Please ensure all dependencies are installed:")
         print(install_instructions)
 
-        wait('Press [ENTER] to exit')
+        input('Press [ENTER] to exit')
         sys.exit(1)
 
     if not is_database_correctly_configured():
         print("Please ensure correct database configuration.")
 
-        wait('Press [ENTER] to exit')
+        input('Press [ENTER] to exit')
         sys.exit(1)
 
     if not has_desire_conf():
         print("DesireCore must be installed and configured, including JSONRPC access in desire.conf")
         
-        wait('Press [ENTER] to exit')
+        input('Press [ENTER] to exit')
         sys.exit(1)
 
 

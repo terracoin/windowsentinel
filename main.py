@@ -12,6 +12,7 @@ import math
 import logging
 import traceback
 
+from builtins import input
 from colorama import init
 from termcolor import colored
 from pynput import keyboard
@@ -47,11 +48,11 @@ def fix_masternode(data_folder):
     wallet_file = os.path.join(data_folder, 'wallet.dat')
 
     if not os.path.isfile(wallet_file):
-        print('It seems like the data folder (the one containing wallet.data) is not the same as the folder where desire.conf is')
+        print('It seems like the data folder (the one containing wallet.dat) is not the same as the folder where desire.conf is')
         data_folder = input('Please, write the data folder path: ')
         return fix_masternode(data_folder)
 
-    print(colored('Make a copy of "wallet.data" and "desire.conf" before continuing.\nThis program will try it best not to touch them, but just in case!', attrs=['bold']))
+    print(colored('Make a copy of "wallet.dat" and "desire.conf" before continuing.\nThis program will try it best not to touch them, but just in case!', attrs=['bold']))
     confirm = input('Once done, press [ENTER], or write cancel + [ENTER] to exit\n')
     if confirm.lower() == "cancel":
         return
