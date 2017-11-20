@@ -9,6 +9,8 @@ import shutil
 import string
 import random
 import math
+import logging
+import traceback
 
 from colorama import init
 from termcolor import colored
@@ -23,6 +25,7 @@ def random_string(n):
     return ''.join(pool[rnd.randint(0, m)] for _ in range(n))
 
 def run_sentinel():
+    logger = logging.getLogger('sentinel')
     print(colored('Sentinel runs every 1 minute', 'green'))
 
     while True:
@@ -33,6 +36,10 @@ def run_sentinel():
             sentinel.entrypoint()
         except Exception as e:
             print(colored('Error: {}'.format(e), 'red'))
+
+            logger.error(str(e))
+            logger.error(traceback.format_exc())
+            logger.error('--------------------')
         
         time.sleep(60) # Wait for a minute
 
@@ -178,6 +185,14 @@ def menu():
 
 if __name__ == '__main__':
     init()
+
+    # Setup logging
+    logger = logging.getLogger('sentinel')
+    hdlr = logging.FileHandler('sentinel.log')
+    formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+    hdlr.setFormatter(formatter)
+    logger.addHandler(hdlr) 
+    logger.setLevel(logging.INFO)
 
     if os.path.isfile(config.sentinel_config_file):
         print(colored('Using sentinel.conf: {}'.format(config.sentinel_config_file), 'green'))
