@@ -48,14 +48,17 @@ def get_desire_conf():
     else:
         home = os.environ.get('HOME')
         if home is not None:
-            desire_conf = os.path.join(home, ".desirecore/desire.conf")
+            if sys.platform == 'darwin':
+                desire_conf = os.path.join(home, "Library/Application Support/DesireCore/desire.conf")
+            else:
+                desire_conf = os.path.join(home, ".desirecore/desire.conf")
         else:
             home = os.getenv('APPDATA')
-            desire_conf = os.path.join(home, "desirecore\\desire.conf")
-
-        if sys.platform == 'darwin':
-            desire_conf = os.path.join(home, "Library/Application Support/DesireCore/desire.conf")
-
+            if home is not None:
+                desire_conf = os.path.join(home, "desirecore\\desire.conf")
+            else:
+                desire_conf = 'desire.conf'
+        
         desire_conf = sentinel_cfg.get('desire_conf', desire_conf)
 
     return desire_conf
