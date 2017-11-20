@@ -179,10 +179,10 @@ def menu():
 if __name__ == '__main__':
     init()
 
-    print(colored('Using desire.conf: {}'.format(config.desire_conf), 'green'))
+    if os.path.isfile(config.sentinel_config_file):
+        print(colored('Using sentinel.conf: {}'.format(config.sentinel_config_file), 'green'))
 
-    try: input = raw_input
-    except NameError: pass
+    print(colored('Using desire.conf: {}'.format(config.desire_conf), 'green'))
 
     option = menu()
     if option == 1: 

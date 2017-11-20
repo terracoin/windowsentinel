@@ -6,14 +6,21 @@ import sys
 import os
 from desire_config import DesireConfig
 
+
 default_sentinel_config = os.path.normpath(
     os.path.join(os.path.dirname(__file__), '../sentinel.conf')
 )
+
+if not os.path.isfile(default_sentinel_config):
+    base = os.path.abspath(os.path.dirname(sys.argv[0]))
+    default_sentinel_config = os.path.join(base, 'sentinel.conf')
+
 sentinel_config_file = os.environ.get('SENTINEL_CONFIG', default_sentinel_config)
 
 sentinel_cfg = DesireConfig.tokenize(sentinel_config_file)
 sentinel_version = "1.1.0"
 min_desired_proto_version_with_sentinel_ping = 70207
+
 
 def get_argarse():
     parser = argparse.ArgumentParser()

@@ -82,40 +82,31 @@ def has_desire_conf():
 def main():
     install_instructions = "\tpip install -r requirements.txt"
 
-    try: input = raw_input
-    except NameError: pass
+    wait = getattr(__builtins__, 'raw_input', input)
 
     if not is_valid_python_version():
         print("Python %s is not supported" % python_short_ver_str())
 
-        print('Press [ENTER] to exit')
-        input()
-
+        wait('Press [ENTER] to exit')
         sys.exit(1)
 
     if not are_deps_installed():
         print("Please ensure all dependencies are installed:")
         print(install_instructions)
 
-        print('Press [ENTER] to exit')
-        input()
-
+        wait('Press [ENTER] to exit')
         sys.exit(1)
 
     if not is_database_correctly_configured():
         print("Please ensure correct database configuration.")
 
-        print('Press [ENTER] to exit')
-        input()
-
+        wait('Press [ENTER] to exit')
         sys.exit(1)
 
     if not has_desire_conf():
         print("DesireCore must be installed and configured, including JSONRPC access in desire.conf")
         
-        print('Press [ENTER] to exit')
-        input()
-
+        wait('Press [ENTER] to exit')
         sys.exit(1)
 
 
