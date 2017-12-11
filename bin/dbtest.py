@@ -9,17 +9,17 @@ import config
 from models import Superblock, Proposal, GovernanceObject, Setting, Signal, Vote, Outcome, Watchdog
 from models import VoteSignals, VoteOutcomes
 from peewee import PeeweeException  # , OperationalError, IntegrityError
-from desired import DesireDaemon
-import desirelib
+from terracoind import TerracoinDaemon
+import terracoinlib
 from decimal import Decimal
-desired = DesireDaemon.from_desire_conf(config.desire_conf)
+terracoind = TerracoinDaemon.from_terracoin_conf(config.terracoin_conf)
 import misc
 # ==============================================================================
 # do stuff here
 
 pr = Proposal(
     name='proposal7',
-    url='https://desirecentral.com/proposal7',
+    url='https://terracoincentral.com/proposal7',
     payment_address='yTC62huR4YQEPn9AJHjnQxxreHSbgAoatV',
     payment_amount=39.23,
     start_epoch=1483250400,
@@ -33,13 +33,13 @@ pr = Proposal(
 # )
 
 
-# TODO: make this a test, mock 'desired' and tie a test block height to a
+# TODO: make this a test, mock 'terracoind' and tie a test block height to a
 # timestamp, ensure only unit testing a within_window method
 #
 # also, create the `within_window` or similar method & use that.
 #
 bh = 131112
-bh_epoch = desired.block_height_to_epoch(bh)
+bh_epoch = terracoind.block_height_to_epoch(bh)
 
 fudge = 72000
 window_start = 1483689082 - fudge
@@ -56,7 +56,7 @@ else:
     print("Within window, we're good!")
 
 # pdb.set_trace()
-# desired.get_object_list()
+# terracoind.get_object_list()
 # ==============================================================================
 # pdb.set_trace()
 1

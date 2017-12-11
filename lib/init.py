@@ -58,23 +58,23 @@ def is_database_correctly_configured():
     return configured
 
 
-def has_desire_conf():
+def has_terracoin_conf():
     import config
     import io
 
-    valid_desire_conf = False
+    valid_terracoin_conf = False
 
-    # ensure desire_conf exists & readable
+    # ensure terracoin_conf exists & readable
     #
-    # if not, print a message stating that Desire Core must be installed and
-    # configured, including JSONRPC access in desire.conf
+    # if not, print a message stating that Terracoin Core must be installed and
+    # configured, including JSONRPC access in terracoin.conf
     try:
-        f = io.open(config.desire_conf)
-        valid_desire_conf = True
+        f = io.open(config.terracoin_conf)
+        valid_terracoin_conf = True
     except IOError as e:
         print(e)
 
-    return valid_desire_conf
+    return valid_terracoin_conf
 
 
 # === begin main
@@ -102,8 +102,8 @@ def main():
         input('Press [ENTER] to exit')
         sys.exit(1)
 
-    if not has_desire_conf():
-        print("DesireCore must be installed and configured, including JSONRPC access in desire.conf")
+    if not has_terracoin_conf():
+        print("TerracoinCore must be installed and configured, including JSONRPC access in terracoin.conf")
         
         input('Press [ENTER] to exit')
         sys.exit(1)

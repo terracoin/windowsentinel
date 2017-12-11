@@ -1,9 +1,9 @@
 #!/bin/bash
 set -evx
 
-mkdir ~/.desirecore
+mkdir ~/.terracoincore
 
 # safety check
-if [ ! -f ~/.desirecore/.desire.conf ]; then
-  cp share/desire.conf.example ~/.desirecore/desire.conf
+if [ ! -f ~/.terracoincore/.terracoin.conf ]; then
+  cp share/terracoin.conf.example ~/.terracoincore/terracoin.conf
 fi

@@ -4,8 +4,7 @@
 import argparse
 import sys
 import os
-from desire_config import DesireConfig
-
+from terracoin_config import TerracoinConfig
 
 default_sentinel_config = os.path.normpath(
     os.path.join(os.path.dirname(__file__), '../sentinel.conf')
@@ -17,9 +16,8 @@ if not os.path.isfile(default_sentinel_config):
 
 sentinel_config_file = os.environ.get('SENTINEL_CONFIG', default_sentinel_config)
 
-sentinel_cfg = DesireConfig.tokenize(sentinel_config_file)
+sentinel_cfg = TerracoinConfig.tokenize(sentinel_config_file)
 sentinel_version = "1.1.0"
-min_desired_proto_version_with_sentinel_ping = 70207
 
 
 def get_argarse():
@@ -42,28 +40,28 @@ def get_args():
 
     return args
 
-def get_desire_conf():
+def get_terracoin_conf():
     args = get_args()
 
     if args.config:
-        desire_conf = args.config
+        terracoin_conf = args.config
     else:
         home = os.environ.get('HOME')
         if home is not None:
             if sys.platform == 'darwin':
-                desire_conf = os.path.join(home, "Library/Application Support/DesireCore/desire.conf")
+                terracoin_conf = os.path.join(home, "Library/Application Support/TerracoinCore/terracoin.conf")
             else:
-                desire_conf = os.path.join(home, ".desirecore/desire.conf")
+                terracoin_conf = os.path.join(home, ".terracoincore/terracoin.conf")
         else:
             home = os.getenv('APPDATA')
             if home is not None:
-                desire_conf = os.path.join(home, "desirecore\\desire.conf")
+                terracoin_conf = os.path.join(home, "terracoincore\\terracoin.conf")
             else:
-                desire_conf = 'desire.conf'
+                terracoin_conf = 'terracoin.conf'
         
-        desire_conf = sentinel_cfg.get('desire_conf', desire_conf)
+        terracoin_conf = sentinel_cfg.get('terracoin_conf', terracoin_conf)
 
-    return desire_conf
+    return terracoin_conf
 
 
 def get_network():
@@ -119,6 +117,6 @@ def get_db_conn():
     return db
 
 
-desire_conf = get_desire_conf()
+terracoin_conf = get_terracoin_conf()
 network = get_network()
 db = get_db_conn()

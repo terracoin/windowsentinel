@@ -8,30 +8,30 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', 'lib'))
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 import config
 
-from desired import DesireDaemon
-from desire_config import DesireConfig
+from terracoind import TerracoinDaemon
+from terracoin_config import TerracoinConfig
 
 
-def test_desired():
-    config_text = DesireConfig.slurp_config_file(config.desire_conf)
+def test_terracoind():
+    config_text = TerracoinConfig.slurp_config_file(config.terracoin_conf)
     network = 'mainnet'
     is_testnet = False
-    genesis_hash = u'00000f79a81b6318e0f36dc486adf4bb5bb1fa34025d69b991893c42978c2027'
+    genesis_hash = u'00000000804bbc6a621a9dbb564ce469f492e1ccf2d70f8a6b241e26a277afa2'
     for line in config_text.split("\n"):
         if line.startswith('testnet=1'):
             network = 'testnet'
             is_testnet = True
             genesis_hash = u'00000bafbc94add76cb75e2ec92894837288a481e5c005f6563d91623bf8bc2c'
 
-    creds = DesireConfig.get_rpc_creds(config_text, network)
-    desired = DesireDaemon(**creds)
-    assert desired.rpc_command is not None
+    creds = TerracoinConfig.get_rpc_creds(config_text, network)
+    terracoind = TerracoinDaemon(**creds)
+    assert terracoind.rpc_command is not None
 
-    assert hasattr(desired, 'rpc_connection')
+    assert hasattr(terracoind, 'rpc_connection')
 
-    # Desire testnet block 0 hash == 00000bafbc94add76cb75e2ec92894837288a481e5c005f6563d91623bf8bc2c
+    # Terracoin testnet block 0 hash == 00000bafbc94add76cb75e2ec92894837288a481e5c005f6563d91623bf8bc2c
     # test commands without arguments
-    info = desired.rpc_command('getinfo')
+    info = terracoind.rpc_command('getinfo')
     info_keys = [
         'blocks',
         'connections',
@@ -48,4 +48,4 @@ def test_desired():
     assert info['testnet'] is is_testnet
 
     # test commands with args
-    assert desired.rpc_command('getblockhash', 0) == genesis_hash
+    assert terracoind.rpc_command('getblockhash', 0) == genesis_hash
