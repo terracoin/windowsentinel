@@ -88,8 +88,8 @@ class GovernanceObject(BaseModel):
         for item in golist.values():
 	    try:
                 (go, subobj) = self.import_gobject_from_terracoind(terracoind, item)
-        except Exception as e:
-            printdbg("Got an error upon import: %s" % e)
+            except Exception as e:
+                printdbg("Got an error upon import: %s" % e)
 
     @classmethod
     def purged_network_objects(self, network_object_hashes):
