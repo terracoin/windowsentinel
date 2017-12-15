@@ -14,12 +14,12 @@ Change the username part to your username on your computer.
 
 Open terracoin.conf and make sure it has at least:
 
-'''rpcuser=someuser
+```rpcuser=someuser
 rpcpassword=somepass
 server=1
 rpcport=13332
 rpcconnect=127.0.0.1
-'''
+```
 
 Restart Terracoin-QT and wait for it to sync.
 
