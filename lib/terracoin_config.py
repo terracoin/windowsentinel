@@ -33,22 +33,15 @@ class TerracoinConfig():
         # python >= 2.7
         creds = {key: value for (key, value) in match}
 
-        # Fetch port from args, if any (import here to avoid circular deps)
-        from config import get_args
-        args = get_args()
+        # standard Terracoin defaults...
+        default_port = 13332 if (network == 'mainnet') else 18332
 
-        if args.rpc_port:
-            creds[u'port'] = args.rpc_port
-        else:
-            # standard Terracoin defaults...
-            default_port = 13332 if (network == 'mainnet') else 18332
+        # use default port for network if not specified in terracoin.conf
+        if not ('port' in creds):
+            creds[u'port'] = default_port
 
-            # use default port for network if not specified in terracoin.conf
-            if not ('port' in creds):
-                creds[u'port'] = default_port
-
-            # convert to an int if taken from terracoin.conf
-            creds[u'port'] = int(creds[u'port'])
+        # convert to an int if taken from terracoin.conf
+        creds[u'port'] = int(creds[u'port'])
 
         # return a dictionary with RPC credential key, value pairs
         return creds
