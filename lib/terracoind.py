@@ -160,7 +160,7 @@ class TerracoinDaemon():
 
     def is_govobj_maturity_phase(self):
         # 3-day period for govobj maturity
-        maturity_phase_delta = 1662      # ~(60*24*3)/2.6
+        maturity_phase_delta = 2057      # ~(60*24*3)/2.1
         if config.network == 'testnet':
             maturity_phase_delta = 24    # testnet
 
@@ -241,7 +241,8 @@ class TerracoinDaemon():
 
     @property
     def has_sentinel_ping(self):
-        return False
+        getinfo = self.rpc_command('getnetworkinfo')
+        return (getinfo['protocolversion'] >= config.min_terracoind_proto_version_with_sentinel_ping)
 
     def ping(self):
         self.rpc_command('sentinelping', config.sentinel_version)
