@@ -4,7 +4,7 @@ All masternodes must run Sentinel.
 
 Will update instructions soon.
 
-1. Download [trcsentinel.exe](https://github.com/clockuniverse/WINsen/releases)
+1. Download [trcsentinel.exe](https://github.com/terracoin/windowsentinel/releases)
 2. Create a sentinel.conf file in the same directory that you downloaded trcsentinel.exe with this inside:
 terracoin_conf=C:\Users\USERNAME\AppData\Roaming\TerracoinCore\terracoin.conf
 
